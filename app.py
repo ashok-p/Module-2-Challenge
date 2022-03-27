@@ -7,11 +7,14 @@ Example:
     $ python app.py
 """
 import sys
+import csv
+import pathlib
+from pathlib import Path
 import fire
 import questionary
 from pathlib import Path
 
-from qualifier.utils.fileio import load_csv
+from qualifier.utils.fileio import load_csv, save_csv
 
 from qualifier.utils.calculators import (
     calculate_monthly_debt_ratio,
@@ -107,9 +110,38 @@ def save_qualifying_loans(qualifying_loans):
 
     Args:
         qualifying_loans (list of lists): The qualifying bank loans.
+
+    Acceptance Criteria
+        When there are no qualifying loans the program should notify the user and exit.
+        When there is a list of qualifyig loans, then
+        - prompt the user to save the results as a CSV file.
+        - when prompted to save the results, then should be able to opt out of saving the file.
+        - when choose to save the loans, it should prompt for a file path to save the file.
+        - when choose to save the loans, then it should save the results as a CSV file.
     """
     # @TODO: Complete the usability dialog for savings the CSV Files.
     # YOUR CODE HERE!
+
+
+    if len(qualifying_loans)== 0:
+        print("There are no qualified loans for you. Sorry!!")
+        return
+    want_to_save=questionary.confirm("Do you want to save the Qualified Loans to a file (Default is Yes)", default=True, qmark='?').ask()
+    if not want_to_save:
+        return 
+    file_does_not_exist = True
+    while file_does_not_exist:
+        csvpath = questionary.text("Enter a file name to save the Qualified Loans (.csv): ").ask()
+        csvpath = Path(csvpath)
+        if not csvpath.exists():
+            header=["Lender", "Max Loan Amount", "Max LTV", "Max DTI", "Min Credit Score", "Interest Rate"]
+            #save the loans to csvfile 
+            save_csv(csvpath, header, qualifying_loans)
+            file_does_not_exist=False
+        else:
+            sys.exit(f"Oops! {csvpath} already exists")        
+
+    return
 
 
 def run():
@@ -126,7 +158,7 @@ def run():
         bank_data, credit_score, debt, income, loan_amount, home_value
     )
 
-    # Save qualifying loans
+# Save qualifying loans
     save_qualifying_loans(qualifying_loans)
 
 
