@@ -61,10 +61,16 @@ Following are the instructions to install the application from its Github respos
 2. open the Terminal window and clone as follows:
     * $cd to_your_preferred_directory_where_you want_to_store_this_application
     * $git clone URL_link_that_was_copied_in_step_1_above
+    * $ls  
+    Module-2-Challenge
+    * $cd Module-2-Challenge
+
 
 At this point you will have the the entire application files in the current directory as follows:
 
 * README.md                   (this file that you are reading)
+* requirements.txt             (package requirements)
+* history.txt                   (Terminal history)
 * app.py                      (the loan qualifier application)
 * data                        (folder)
     - daily_rate_sheet.csv   (Bank loan rate sheet)
